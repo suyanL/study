@@ -1,0 +1,23 @@
+#spring.application.name=dubbo-consumer
+server:
+  port: 8200
+#应用名称
+spring:
+  dubbo:
+    application:
+      id: consumer
+      name: consumer
+    #注册中心地址
+    protocol:
+      name: dubbo
+    registry:
+      address: zookeeper://1.116.200.82:2181
+      #注册订阅失败时，也允许启动
+      check: false
+    #调用dubbo组建扫描的项目路径
+    scan: com.study.demo
+  qos:
+    port: 22223
+    consumer:
+      #关闭所有服务的启动时检查
+      check: false
