@@ -3,6 +3,9 @@ package com.example.springbootweb.demo;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @SpringBootTest
 public class LeecodeTest {
 
@@ -77,6 +80,7 @@ public class LeecodeTest {
         }
         System.out.println(s.substring(begin, begin + maxLen));
     }
+
     /**
      * 验证子串 s[left..right] 是否为回文串
      */
@@ -90,4 +94,78 @@ public class LeecodeTest {
         }
         return true;
     }
+
+    //------ 双指针算法@盛最多的水
+    @Test
+    public void maxArea() {
+        int[] height = {1, 8, 6, 2, 5, 4, 8, 3, 7};
+        int l = 0, r = height.length - 1;
+        int ans = 0;
+        while (l < r) {
+            int area = Math.min(height[l], height[r]) * (r - l);
+            ans = Math.max(ans, area);
+            if (height[l] <= height[r]) {
+                ++l;
+            } else {
+                --r;
+            }
+        }
+        System.out.println(ans);
+    }
+
+    /**
+     * ----Z 字形变换 leetcode:https://leetcode.cn/problems/zigzag-conversion/solution/zzi-xing-bian-huan-by-jyd/
+     * P     I    N
+     * A   L S  I G
+     * Y A   H R
+     * P     I
+     */
+    @Test
+    public void convert() {
+        String s = "PAYPALISHIRING";
+        int numRows = 4;
+        if(numRows < 2) System.out.println(s);
+        List<StringBuilder> rows = new ArrayList<StringBuilder>();
+        for(int i = 0; i < numRows; i++) {
+            rows.add(new StringBuilder());
+        }
+        int i = 0, flag = -1;
+        for(char c : s.toCharArray()) {
+            rows.get(i).append(c);
+            if(i == 0 || i == numRows -1) flag = - flag;
+            i += flag;
+        }
+        StringBuilder res = new StringBuilder();
+        for(StringBuilder row : rows) {
+            res.append(row);
+        }
+        System.out.println(res);
+    }
+
+    /**
+     * 最长公共子序列
+     *
+     * 例如，"ace" 是 "abcde" 的子序列，但 "aec" 不是 "abcde" 的子序列。
+     *
+     * 输入：text1 = "abcde", text2 = "ace"
+     * 输出：3
+     * 解释：最长公共子序列是 "ace" ，它的长度为 3 。
+     */
+    @Test
+    public void longestCommonSubsequence(String text1, String text2) {
+        int M = text1.length();
+        int N = text2.length();
+        int[][] dp = new int[M + 1][N + 1];
+        for (int i = 1; i <= M; ++i) {
+            for (int j = 1; j <= N; ++j) {
+                if (text1.charAt(i - 1) == text2.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                } else {
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+        System.out.println(dp[M][N]);
+    }
+
 }
