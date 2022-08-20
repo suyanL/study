@@ -4,6 +4,8 @@ import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.List;
 
 @SpringBootTest
@@ -124,19 +126,19 @@ public class LeecodeTest {
     public void convert() {
         String s = "PAYPALISHIRING";
         int numRows = 4;
-        if(numRows < 2) System.out.println(s);
+        if (numRows < 2) System.out.println(s);
         List<StringBuilder> rows = new ArrayList<StringBuilder>();
-        for(int i = 0; i < numRows; i++) {
+        for (int i = 0; i < numRows; i++) {
             rows.add(new StringBuilder());
         }
         int i = 0, flag = -1;
-        for(char c : s.toCharArray()) {
+        for (char c : s.toCharArray()) {
             rows.get(i).append(c);
-            if(i == 0 || i == numRows -1) flag = - flag;
+            if (i == 0 || i == numRows - 1) flag = -flag;
             i += flag;
         }
         StringBuilder res = new StringBuilder();
-        for(StringBuilder row : rows) {
+        for (StringBuilder row : rows) {
             res.append(row);
         }
         System.out.println(res);
@@ -144,15 +146,18 @@ public class LeecodeTest {
 
     /**
      * 最长公共子序列
-     *
+     * <p>
      * 例如，"ace" 是 "abcde" 的子序列，但 "aec" 不是 "abcde" 的子序列。
-     *
+     * <p>
      * 输入：text1 = "abcde", text2 = "ace"
      * 输出：3
      * 解释：最长公共子序列是 "ace" ，它的长度为 3 。
      */
     @Test
-    public void longestCommonSubsequence(String text1, String text2) {
+    public void longestCommonSubsequence() {
+        String text1 = "abcde";
+        String text2 = "ace";
+
         int M = text1.length();
         int N = text2.length();
         int[][] dp = new int[M + 1][N + 1];
@@ -167,5 +172,68 @@ public class LeecodeTest {
         }
         System.out.println(dp[M][N]);
     }
+
+    @Test
+    public void evalRPN() {
+        String[] tokens = {"10","6","9","3","+","-11","*","/","*","17","+","5","+"};
+        Deque<Integer> stack = new LinkedList<Integer>();
+        int n = tokens.length;
+        for (int i = 0; i < n; i++) {
+            String token = tokens[i];
+            if (isNumber(token)) {
+                stack.push(Integer.parseInt(token));
+            } else {
+                int num2 = stack.pop();
+                int num1 = stack.pop();
+                switch (token) {
+                    case "+":
+                        stack.push(num1 + num2);
+                        break;
+                    case "-":
+                        stack.push(num1 - num2);
+                        break;
+                    case "*":
+                        stack.push(num1 * num2);
+                        break;
+                    case "/":
+                        stack.push(num1 / num2);
+                        break;
+                    default:
+                }
+            }
+        }
+        System.out.println(stack.pop());
+    }
+    public boolean isNumber(String token) {
+        return !("+".equals(token) || "-".equals(token) || "*".equals(token) || "/".equals(token));
+    }
+
+    @Test
+    public void str() {
+        String ps = "$ab$$sh$$$gggg";
+        if (ps == null) {
+            System.out.println(0);
+            return;
+        }
+        Deque<Character> stack = new LinkedList<>();
+        char[] chars = ps.toCharArray();
+        int length = chars.length;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            stack.push(chars[i]);
+        }
+        boolean is = false;
+        while (!stack.isEmpty()) {
+            Character pop = stack.pop();
+            if (pop != '$' && !is) {
+                sb.append(pop);
+            }
+            if (pop == '$') {
+                is = true;
+            }
+        }
+        System.out.println(sb.length());
+    }
+
 
 }
